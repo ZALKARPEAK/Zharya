@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hackaton
+    username: postgres
+    password: Xemyru
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: never
+      encoding: UTF-8
+      data-locations: classpath:dataInit/db.sql
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: lernobrat@gmail.com
+    password: xztt xtks iziu jcvh
+    properties:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+
+server:
+  port: 2024
+
+jwt:
+  secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  token:
+    expiration-time: 10000
+
+logging:
+  level:
+    com.example.restaurantpetproject.util.logger.DynamicLogger: debug
+    org.springframework: info
+
+app:
+  verification-code-expiration-minutes: 1
