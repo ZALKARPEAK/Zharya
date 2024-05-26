@@ -56,7 +56,7 @@ public class EmailServiceImpl implements EmailService {
 
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
         helper.setFrom(mailUsername);
-        helper.setSubject("Reset password");
+        helper.setSubject("Изменения пароля");
         helper.setTo(email);
         helper.setText(emailContent, true);
 
