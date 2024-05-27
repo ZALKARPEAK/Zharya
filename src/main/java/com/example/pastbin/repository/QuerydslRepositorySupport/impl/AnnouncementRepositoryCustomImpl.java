@@ -1,6 +1,6 @@
 package com.example.pastbin.repository.QuerydslRepositorySupport.impl;
 
-import com.example.pastbin.dto.AnnouncementDto.AnnouncementDefaultGet;
+import com.example.pastbin.dto.Announcement.AnnouncementDefaultGet;
 import com.example.pastbin.repository.QuerydslRepositorySupport.AnnouncementRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -36,7 +36,7 @@ public class Announcement implements Serializable {
     private User user;
 
     public void setSubCategory(String subCategory) {
-        if (category != null && category.getFields().contains(subCategory)) {
+        if (category != null && category.getSubCategories().contains(subCategory)) {
             this.subCategory = subCategory;
         } else {
             throw new IllegalArgumentException("Invalid subcategory for the selected category");

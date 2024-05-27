@@ -1,4 +1,4 @@
-package com.example.pastbin.dto.AnnouncementDto;
+package com.example.pastbin.dto.Announcement;
 
 import lombok.Builder;
 import lombok.Setter;

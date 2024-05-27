@@ -161,17 +161,28 @@ public enum Category {
     ));
 
 
-    private List<String> fields;
+    private final String displayName;
+    private final List<String> subCategories;
 
-    Category(String name, List<String> fields) {
-        this.fields = fields;
+    Category(String displayName, List<String> subCategories) {
+        this.displayName = displayName;
+        this.subCategories = subCategories;
     }
 
-    public List<String> getFields() {
-        return fields;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setFields(List<String> fields) {
-        this.fields = fields;
+    public List<String> getSubCategories() {
+        return subCategories;
+    }
+
+    public static Category fromDisplayName(String displayName) {
+        for (Category category : Category.values()) {
+            if (category.getDisplayName().equalsIgnoreCase(displayName)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with display name " + displayName);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.pastbin.repository.QuerydslRepositorySupport;
 
-import com.example.pastbin.dto.AnnouncementDto.AnnouncementDefaultGet;
+import com.example.pastbin.dto.Announcement.AnnouncementDefaultGet;
 
 import java.util.List;
 
