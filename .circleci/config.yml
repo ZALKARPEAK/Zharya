@@ -14,7 +14,7 @@ jobs:
           name: Install SSH And Configure
           command: |
             echo $SSH_PRIVATE_KEY | base64 --decode > ./Xemyru.pem
-            chmod 400 privateKey.pem
+            chmod 400 Xemyru.pem
       - run:
           name: Install Docker If Not Exists
           command: |
@@ -56,7 +56,7 @@ jobs:
           name: Install SSH And Configure
           command: |
             echo $SSH_PRIVATE_KEY | base64 --decode > ./Xemyru.pem
-            chmod 400 privateKey.pem
+            chmod 400 Xemyru.pem
       - run:
           name: Stop Remote Docker-Compose
           command: |
