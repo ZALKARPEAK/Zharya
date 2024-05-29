@@ -14,12 +14,12 @@ jobs:
       - run:
           name: Install SSH And Configure
           command: |
-            echo $SSH_PRIVATE_KEY | base64 --decode > ./Xemyru.pem
-            chmod 400 Xemyru.pem
+            echo $SSH_PRIVATE_KEY | base64 --decode > ./Xemyru.b64
+            chmod 400 Xemyru.b64
       - run:
           name: Install Docker If Not Exists
           command: |
-            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@$HOST '
+            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.b64 ubuntu@$HOST '
             if [[ ! $(sudo docker -v) ]]; then
                sudo snap install docker
             fi'
@@ -58,12 +58,12 @@ jobs:
       - run:
           name: Install SSH And Configure
           command: |
-            echo $SSH_PRIVATE_KEY | base64 --decode > ./Xemyru.pem
-            chmod 400 Xemyru.pem
+            echo $SSH_PRIVATE_KEY | base64 --decode > ./Xemyru.b64
+            chmod 400 Xemyru.b64
       - run:
           name: Stop Remote Docker-Compose
           command: |
-            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@$HOST '
+            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.b64 ubuntu@$HOST '
             if [[ -e ./docker-compose.yml ]]; then
                 if [[ $(sudo docker-compose -f ./docker-compose.yml ps -q) ]]; then
                     sudo docker-compose down --rmi="all"
@@ -73,11 +73,11 @@ jobs:
       - run:
           name: Transfer Files
           command: |
-            scp -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ./<< pipeline.parameters.docker-container >>.tar.gz ./docker-compose.yml ubuntu@$HOST:~/
+            scp -o "StrictHostKeyChecking=no" -i ./Xemyru.b64 ./<< pipeline.parameters.docker-container >>.tar.gz ./docker-compose.yml ubuntu@$HOST:~/
       - run:
           name: Decompress Docker Image | Run Compose
           command: |
-            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@$HOST '
+            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.b64 ubuntu@$HOST '
             sudo gunzip -c ./<< pipeline.parameters.docker-container >>.tar.gz | sudo docker load
             sudo rm ./<< pipeline.parameters.docker-container >>.tar.gz
             sudo docker-compose up -d
