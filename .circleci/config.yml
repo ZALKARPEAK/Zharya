@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Install Docker If Not Exists
           command: |
-            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@54.242.196.103 '
+            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@$HOST '
             if [[ ! $(sudo docker -v) ]]; then
                sudo snap install docker
             fi'
@@ -60,7 +60,7 @@ jobs:
       - run:
           name: Stop Remote Docker-Compose
           command: |
-            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@54.242.196.103 '
+            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@$HOST '
             if [[ -e ./docker-compose.yml ]]; then
                 if [[ $(sudo docker-compose -f ./docker-compose.yml ps -q) ]]; then
                     sudo docker-compose down --rmi="all"
@@ -74,7 +74,7 @@ jobs:
       - run:
           name: Decompress Docker Image | Run Compose
           command: |
-            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@54.242.196.103 '
+            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@$HOST '
             sudo gunzip -c ./<< pipeline.parameters.docker-container >>.tar.gz | sudo docker load
             sudo rm ./<< pipeline.parameters.docker-container >>.tar.gz
             sudo docker-compose up -d
