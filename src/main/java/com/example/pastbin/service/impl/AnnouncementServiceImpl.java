@@ -1,6 +1,7 @@
 package com.example.pastbin.service.impl;
 
-import com.example.pastbin.dto.AnnouncementDto.AddAnnouncementRequest;
+import com.example.pastbin.dto.Announcement.AddAnnouncementRequest;
+import com.example.pastbin.dto.Announcement.UpdateAnnouncementRequest;
 import com.example.pastbin.entity.Announcement;
 import com.example.pastbin.entity.UserInfo;
 import com.example.pastbin.entity.enums.Category;
@@ -10,11 +11,13 @@ import com.example.pastbin.repository.UserInfoRepository;
 import com.example.pastbin.service.AnnouncementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -31,15 +34,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 new NotFoundException("UserInfo not found"));
 
         Announcement announcement = new Announcement();
-        announcement.setTitle(request.getTitle());
-        announcement.setCategory(Category.valueOf(request.getCategory().toLowerCase()));
-        announcement.setSubCategory(request.getSubCategory());
-        announcement.setCity(request.getCity());
-        announcement.setAddress(request.getAddress());
-        announcement.setDescription(request.getDescription());
-        announcement.setPrice(request.getPrice());
-        announcement.setUserName(request.getUserName());
-        announcement.setImages(request.getImages());
+        announcementFields(announcement, request);
         announcement.setUser(userInfo.getUser());
 
         if (userInfo.getUser().getPhoneNumber().isEmpty()) {
@@ -52,6 +47,72 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
+    public void editAnnouncement(Long announcementId, UpdateAnnouncementRequest request) {
+        Announcement announcement = announcementRepository.findById(announcementId).orElseThrow(
+                () -> new NotFoundException("Announcement not found"));
+
+        String gmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserInfo userInfo = userInfoRepository.getUserAccountByEmail(gmail)
+                .orElseThrow(() -> new NotFoundException("UserInfo not found"));
+
+        if (announcement.getUser().equals(userInfo.getUser())) {
+            announcementFields(announcement, request);
+            List<String> images = new java.util.ArrayList<>(announcement.getImages().stream().
+                    filter(image -> request.getImagesToDelete().contains(image)).
+                    toList());
+            announcement.setImages(images);
+
+            List<String> newImages = request.getImages();
+            if (newImages != null) {
+                images.addAll(newImages);
+                announcement.setImages(images);
+            }
+
+            announcementRepository.save(announcement);
+        }
+    }
+
+    private void announcementFields(Announcement announcement, Object request) {
+        if (request instanceof AddAnnouncementRequest addRequest) {
+            announcement.setTitle(addRequest.getTitle());
+            announcement.setCategory(Category.fromDisplayName(addRequest.getCategory()));
+            announcement.setSubCategory(addRequest.getSubCategory());
+            announcement.setCity(addRequest.getCity());
+            announcement.setAddress(addRequest.getAddress());
+            announcement.setDescription(addRequest.getDescription());
+            announcement.setPrice(addRequest.getPrice());
+            announcement.setUserName(addRequest.getUserName());
+            announcement.setImages(addRequest.getImages());
+        } else if (request instanceof UpdateAnnouncementRequest updateRequest) {
+            announcement.setTitle(updateRequest.getTitle());
+            announcement.setCategory(Category.fromDisplayName(updateRequest.getCategory())  );
+            announcement.setSubCategory(updateRequest.getSubCategory());
+            announcement.setCity(updateRequest.getCity());
+            announcement.setAddress(updateRequest.getAddress());
+            announcement.setDescription(updateRequest.getDescription());
+            announcement.setPrice(updateRequest.getPrice());
+            announcement.setUserName(updateRequest.getUserName());
+            announcement.setImages(updateRequest.getImages());
+        }
+    }
+
+    @Override
+    public void removeAnnouncement(Long announcementId) {
+        String gmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserInfo userInfo = userInfoRepository.getUserAccountByEmail(gmail)
+                .orElseThrow(() -> new NotFoundException("UserInfo not found"));
+
+        Announcement announcement = announcementRepository.findById(announcementId)
+                .orElseThrow(() -> new NotFoundException("Announcement not found"));
+
+        if (!announcement.getUser().equals(userInfo.getUser())) {
+            throw new AccessDeniedException("You are not the owner of this announcement");
+        }
+
+        announcementRepository.delete(announcement);
+    }
+
+    @Override
     public Map<String, Object> getAllCategories() {
         String cacheKey = "all-categories";
         Map<String, Object> response = (Map<String, Object>) redisTemplate.opsForValue().get(cacheKey);
@@ -59,7 +120,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         if (response == null) {
             response = new HashMap<>();
             for (Category category : Category.values()) {
-                response.put(category.name(), category.getFields());
+                response.put(category.name(), category.getSubCategories());
             }
             redisTemplate.opsForValue().set(cacheKey, response, Duration.ofHours(1));
         }

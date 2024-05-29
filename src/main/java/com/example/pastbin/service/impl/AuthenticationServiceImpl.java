@@ -30,7 +30,6 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
-
     private final UserInfoRepository userInfoRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
