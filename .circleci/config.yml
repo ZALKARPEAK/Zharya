@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Install Docker If Not Exists
           command: |
-            ssh -o "StrictHostKeyChecking=no" -i ./privateKey.pem ubuntu@$HOST '
+            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@$HOST '
             if [[ ! $(sudo docker -v) ]]; then
                sudo snap install docker
             fi'
@@ -60,7 +60,7 @@ jobs:
       - run:
           name: Stop Remote Docker-Compose
           command: |
-            ssh -o "StrictHostKeyChecking=no" -i ./privateKey.pem ubuntu@$HOST '
+            ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@$HOST '
             if [[ -e ./docker-compose.yml ]]; then
                 if [[ $(sudo docker-compose -f ./docker-compose.yml ps -q) ]]; then
                     sudo docker-compose down --rmi="all"
