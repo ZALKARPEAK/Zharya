@@ -1,12 +1,18 @@
 package com.example.pastbin.dto.Announcement;
 
-import lombok.Builder;
+import lombok.Getter;
 import lombok.Setter;
 
 @Setter
-@Builder
+@Getter
 public class AnnouncementDefaultGet {
-    private String name;
+    private String title;
     private String description;
-    private String price;
+    private Long price;
+
+    public AnnouncementDefaultGet(String title, String description, Long price) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+    }
 }
