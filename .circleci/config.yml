@@ -9,12 +9,13 @@ jobs:
   install-docker-if-not-exists:
     docker:
       - image: circleci/node:14
+    executor:
     steps:
       - run:
           name: Install SSH And Configure
           command: |
             echo $SSH_PRIVATE_KEY | base64 --decode > ./Xemyru.pem
-            chmod 400 privateKey.pem
+            chmod 400 Xemyru.pem
       - run:
           name: Install Docker If Not Exists
           command: |
@@ -25,6 +26,7 @@ jobs:
   build-image:
     docker:
       - image: docker:20.10.9
+    executor:
     steps:
       - checkout
       - setup_remote_docker
@@ -49,6 +51,7 @@ jobs:
   transfer-and-run:
     docker:
       - image: circleci/node:14
+    executor:
     steps:
       - attach_workspace:
           at: .
