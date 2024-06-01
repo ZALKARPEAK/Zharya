@@ -15,15 +15,12 @@ import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 @CrossOrigin
 @Tag(name = "Auth api", description = "Authentication endpoints")
 public class AuthApi {
-
     private final AuthenticationService authenticationService;
     private final EmailService emailService;
 
@@ -50,7 +47,7 @@ public class AuthApi {
             description = "Sends an email to the user with a confirmation link. The user receives the message and clicks the confirmation button.")
     @PostMapping("/send-email")
     public CustomResponse<?> sendVerificationEmail(@RequestParam String email,
-                                                   @RequestParam String link) throws IOException {
+                                                   @RequestParam String link) {
         emailService.forgotPassword(email, link);
         return new CustomResponse<>(HttpStatus.OK, "Password reset message sent to mail");
     }
