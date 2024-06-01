@@ -31,6 +31,10 @@ public class User implements Serializable {
     @Transient
     private List<Announcement> announcements;
 
+    @OneToMany(mappedBy = "charity")
+    @Transient
+    private List<Charity> charity;
+
     @Override
     public String toString() {
         return "User{" +
