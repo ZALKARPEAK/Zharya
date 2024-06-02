@@ -9,7 +9,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: main
       SERVER_PORT: 2024
-      POSTGRES_DB: jdbc:postgresql://database:5432/postgres
+      POSTGRES_DB: jdbc:postgresql://postgres.cvi6wqooyutx.us-east-1.rds.amazonaws.com:5432/postgres
       POSTGRES_USER: zharyauser
       POSTGRES_PASSWORD: zharya11
 

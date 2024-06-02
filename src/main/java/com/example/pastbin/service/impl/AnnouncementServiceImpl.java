@@ -122,7 +122,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             for (Category category : Category.values()) {
                 response.put(category.name(), category.getSubCategories());
             }
-            redisTemplate.opsForValue().set(cacheKey, response, Duration.ofHours(1));
+            redisTemplate.opsForValue().set(cacheKey, response, Duration.ofDays(7));
         }
 
         return response;
