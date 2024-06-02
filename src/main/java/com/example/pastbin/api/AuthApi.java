@@ -25,26 +25,37 @@ public class AuthApi {
     private final EmailService emailService;
 
     @PostMapping("/sign-up")
-    @Operation(summary = "Sign Up", description = "Register a new user")
+    @Operation(
+            summary = "Sign Up",
+            description = "Registers a new user with the provided sign-up details, such as username, email, and password. This endpoint creates a new user account in the system."
+    )
     public AuthenticationResponse signUp(@RequestBody SignUpRequest signUpRequest) {
         return authenticationService.signUp(signUpRequest);
     }
 
     @PostMapping("/sign-in")
-    @Operation(summary = "Sign In", description = "Authenticate and sign in the user")
+    @Operation(
+            summary = "Sign In",
+            description = "Authenticates the user and returns an authentication response, which includes an access token and other relevant information. The user must provide their valid sign-in credentials, such as email and password, to be authenticated."
+    )
     public AuthenticationResponse signIn(@RequestBody SignInRequest signInRequest) {
         return authenticationService.signIn(signInRequest);
     }
 
     @PostMapping("/google-authenticate")
-    @Operation(summary = "Authentication with Google", description = "Authentication via Google using Firebase")
+    @Operation(
+            summary = "Authentication with Google",
+            description = "Authenticates the user using their Google account. The user must provide a valid Firebase token ID, which is obtained from the Google authentication process. This endpoint integrates with Firebase to verify the token and create an authentication response."
+    )
     public AuthenticationResponse authWithGoogleAccount(@RequestParam String tokenId) throws FirebaseAuthException {
         return authenticationService.authWithGoogleAccount(tokenId);
     }
 
     @SneakyThrows
-    @Operation(summary = "Send Email",
-            description = "Sends an email to the user with a confirmation link. The user receives the message and clicks the confirmation button.")
+    @Operation(
+            summary = "Send Email",
+            description = "Sends a password reset email to the provided email address. The email contains a confirmation link that the user must click to initiate the password recovery process. This endpoint is used for the 'Forgot Password' functionality."
+    )
     @PostMapping("/send-email")
     public CustomResponse<?> sendVerificationEmail(@RequestParam String email,
                                                    @RequestParam String link) {
@@ -52,8 +63,10 @@ public class AuthApi {
         return new CustomResponse<>(HttpStatus.OK, "Password reset message sent to mail");
     }
 
-    @Operation(summary = "Navigate to Forgot Password Page",
-            description = "When the user clicks 'Confirm,' it redirects to the forgot password page. You need to provide the token and new password data.")
+    @Operation(
+            summary = "Navigate to Forgot Password Page",
+            description = "Completes the password recovery process by verifying the provided token and updating the user's password with the new one. This endpoint is called after the user clicks the confirmation link in the password reset email."
+    )
     @PostMapping("/forgot-password")
     public AuthenticationResponse completePasswordRecovery(@RequestParam String token,
                                                            @ValidPassword @RequestParam String newPassword) throws Exception {

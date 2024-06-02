@@ -25,15 +25,21 @@ public class AnnouncementApi {
     private final AnnouncementService announcementService;
 
     @PostMapping("/create-ads")
-    @Operation(summary = "Create Announcement", description = "Create new announcement")
+    @Operation(
+            summary = "Create Announcement",
+            description = "Creates a new announcement with the provided details in the request body. The request must include fields such as title, description, category, subcategory, and other necessary information. Only authenticated users with the 'USER' or 'ADMIN' role are allowed to create announcements."
+    )
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public CustomResponse<?> addAnnouncement(@RequestBody AddAnnouncementRequest request) {
         announcementService.addAnnouncement(request);
-        return new CustomResponse<>(HttpStatus.OK, "Announcement save successfully");
+        return new CustomResponse<>(HttpStatus.OK, "Announcement saved successfully");
     }
 
     @GetMapping("/get-all-categories")
-    @Operation(description = "Get all categories and subcategories")
+    @Operation(
+            summary = "Get All Categories and Subcategories",
+            description = "Retrieves a map containing all the available categories and their corresponding subcategories. This endpoint can be accessed by any user, regardless of their role."
+    )
     @PermitAll
     public ResponseEntity<Map<String, Object>> getAllCategories() {
         Map<String, Object> response = announcementService.getAllCategories();
@@ -41,19 +47,25 @@ public class AnnouncementApi {
     }
 
     @PutMapping("/edit-announcement")
-    @Operation(summary = "Edit Announcement", description = "Edit announcement by id")
+    @Operation(
+            summary = "Edit Announcement",
+            description = "Updates an existing announcement with the provided ID and the new details in the request body. Only authenticated users with the 'USER' or 'ADMIN' role are allowed to edit announcements."
+    )
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public CustomResponse<?> editAnnouncement(@Valid @RequestParam Long announcementId,
                                               @RequestBody UpdateAnnouncementRequest request) {
         announcementService.editAnnouncement(announcementId, request);
-        return new CustomResponse<>(HttpStatus.OK, "Edit was successfully");
+        return new CustomResponse<>(HttpStatus.OK, "Edit was successful");
     }
 
     @DeleteMapping("/delete-announcement")
-    @Operation(summary = "Delete Announcement", description = "Delete announcement by id")
+    @Operation(
+            summary = "Delete Announcement",
+            description = "Deletes an existing announcement with the provided ID. Only authenticated users with the 'USER' or 'ADMIN' role are allowed to delete announcements."
+    )
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public CustomResponse<?> removeAnnouncement(@RequestParam Long announcementId) {
         announcementService.removeAnnouncement(announcementId);
-        return new CustomResponse<>(HttpStatus.OK, "Announcement was successfully");
+        return new CustomResponse<>(HttpStatus.OK, "Announcement was deleted successfully");
     }
 }
