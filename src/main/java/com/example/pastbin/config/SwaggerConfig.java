@@ -16,7 +16,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.Collections;
 
 @Configuration
-@EnableSwagger2
 public class SwaggerConfig {
 
     private static final String API_KEY = "Bearer Token";
@@ -39,12 +38,5 @@ public class SwaggerConfig {
                 .scheme("Bearer");
     }
 
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
-    }
+
 }
