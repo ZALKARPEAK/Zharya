@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/hackaton
-    username: postgres
-    password: Xemyru
+    url: jdbc:postgresql://54.163.196.212:5432/hackaton
+    username: zharyauser
+    password: zharya11
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
