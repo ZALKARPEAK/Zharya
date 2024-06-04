@@ -20,7 +20,10 @@ jobs:
           command: |
             ssh -o "StrictHostKeyChecking=no" -i ./Xemyru.pem ubuntu@$HOST '
             if [[ ! $(sudo docker -v) ]]; then
-               sudo snap install docker
+               if ! sudo snap install docker; then
+                  echo "Failed to install Docker" >&2
+                  exit 1
+               fi
             fi'
   build-image:
     docker:
