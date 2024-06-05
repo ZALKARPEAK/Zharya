@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://54.163.196.212:5432/hackaton
+    url: jdbc:postgresql://34.239.102.60:5432/postgres
     username: zharyauser
     password: zharya11
   jpa:
