@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -61,7 +63,14 @@ public class CharityApi {
             description = "Retrieves a list of all charities."
     )
     @PermitAll
-    public List<CharityDefaultResponse> getAllCharities() {
-        return charityService.charityResponse();
+    public CollectionModel<CharityDefaultResponse> getAllCharities() {
+        List<CharityDefaultResponse> charityResponse = charityService.charityResponse();
+
+        CollectionModel<CharityDefaultResponse> collectionModel = CollectionModel.of(charityResponse);
+
+        collectionModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CharityApi.class)
+                .donateToCharity(null, 0.0)).withRel("donate"));
+
+        return collectionModel;
     }
 }

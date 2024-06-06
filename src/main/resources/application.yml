@@ -1,17 +1,17 @@
 spring:
   datasource:
-    url: jdbc:postgresql://34.239.102.60:5432/postgres
+    url: jdbc:postgresql://18.212.69.110:5432/postgres
     username: zharyauser
     password: zharya11
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+        ddl-auto: create
     open-in-view: true
     defer-datasource-initialization: true
   sql:
     init:
-      mode: never
+      mode: always
       encoding: UTF-8
       data-locations: classpath:dataInit/db.sql
   cache:
