@@ -5,7 +5,7 @@ services:
     container_name: zharya
     restart: always
     ports:
-      - "8080:2024"
+      - "80:2024"
     environment:
       SPRING_PROFILES_ACTIVE: main
       SERVER_PORT: 2024
