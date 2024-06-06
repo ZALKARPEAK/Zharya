@@ -11,12 +11,10 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
 @Configuration
-@EnableSwagger2
 public class SwaggerConfig {
 
     private static final String API_KEY = "Bearer Token";
@@ -26,7 +24,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .components(new Components()
                         .addSecuritySchemes(API_KEY, apiKeySecuritySchema()))
-                .info(new Info().title("Airbnb"))
+                .info(new Info().title("Zharya "))
                 .security(Collections.singletonList(new SecurityRequirement().addList(API_KEY)));
 
     }
