@@ -6,6 +6,7 @@ services:
     restart: always
     ports:
       - "80:2024"
+      - "2024:2024"
 
     environment:
       SPRING_PROFILES_ACTIVE: main
