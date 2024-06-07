@@ -18,5 +18,9 @@ FROM openjdk:21-jdk-slim
 WORKDIR /app
 COPY --from=build /app/target/Zharya-0.0.1-SNAPSHOT.jar .
 
+# Install Redis
+RUN apt-get update && apt-get install -y redis-server
+CMD ["redis-server", "--appendonly", "yes"]
+
 EXPOSE 2024
 CMD ["java", "-jar", "Zharya-0.0.1-SNAPSHOT.jar"]
