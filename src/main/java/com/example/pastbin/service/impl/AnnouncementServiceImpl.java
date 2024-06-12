@@ -1,6 +1,7 @@
 package com.example.pastbin.service.impl;
 
 import com.example.pastbin.dto.Announcement.AddAnnouncementRequest;
+import com.example.pastbin.dto.Announcement.GetAnnouncementByIdResponse;
 import com.example.pastbin.dto.Announcement.UpdateAnnouncementRequest;
 import com.example.pastbin.entity.Announcement;
 import com.example.pastbin.entity.UserInfo;
@@ -126,5 +127,24 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         }
 
         return response;
+    }
+
+    @Override
+    public GetAnnouncementByIdResponse getAnnouncementById(Long announcementId) {
+        Announcement announcement = announcementRepository.findById(announcementId).orElseThrow(() ->
+                new NotFoundException("Announcement not found"));
+
+        return GetAnnouncementByIdResponse.builder()
+                .title(announcement.getTitle())
+                .category(announcement.getCategory())
+                .subCategory(announcement.getSubCategory())
+                .city(announcement.getCity())
+                .address(announcement.getAddress())
+                .description(announcement.getDescription())
+                .price(announcement.getPrice())
+                .images(announcement.getImages())
+                .userName(announcement.getUserName())
+                .phoneNumber(announcement.getPhoneNumber())
+                .build();
     }
 }
