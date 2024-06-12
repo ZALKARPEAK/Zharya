@@ -2,6 +2,7 @@ package com.example.pastbin.api;
 
 import com.example.pastbin.api.response.CustomResponse;
 import com.example.pastbin.dto.Announcement.AddAnnouncementRequest;
+import com.example.pastbin.dto.Announcement.GetAnnouncementByIdResponse;
 import com.example.pastbin.dto.Announcement.UpdateAnnouncementRequest;
 import com.example.pastbin.service.AnnouncementService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -67,5 +68,16 @@ public class AnnouncementApi {
     public CustomResponse<?> removeAnnouncement(@RequestParam Long announcementId) {
         announcementService.removeAnnouncement(announcementId);
         return new CustomResponse<>(HttpStatus.OK, "Announcement was deleted successfully");
+    }
+
+    @GetMapping("/get-announcement-by-id")
+    @Operation(
+            summary = "Get Announcement by ID",
+            description = "Retrieves an announcement by its unique identifier. " +
+                    "The ID of the announcement to be fetched is provided as a request parameter."
+    )
+    @PermitAll
+    public GetAnnouncementByIdResponse getAnnouncementByIdResponse(@RequestParam Long announcementId) {
+        return announcementService.getAnnouncementById(announcementId);
     }
 }
