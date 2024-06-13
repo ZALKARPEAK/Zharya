@@ -6,12 +6,12 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     open-in-view: true
     defer-datasource-initialization: true
   sql:
     init:
-      mode: always
+      mode: never
       encoding: UTF-8
       data-locations: classpath:dataInit/db.sql
   cache:
@@ -41,7 +41,7 @@ jwt:
 
 logging:
   level:
-    com.example.restaurantpetproject.util.logger.DynamicLogger: debug
+    com.example.pastbin.util.logger.DynamicLogge2r: debug
     org.springframework: info
 
 app:

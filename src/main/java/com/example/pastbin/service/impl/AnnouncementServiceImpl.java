@@ -10,6 +10,7 @@ import com.example.pastbin.exceptions.NotFoundException;
 import com.example.pastbin.repository.AnnouncementRepository;
 import com.example.pastbin.repository.UserInfoRepository;
 import com.example.pastbin.service.AnnouncementService;
+import com.example.pastbin.util.hateoas.AnnouncementHateoasAdder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.AccessDeniedException;
@@ -27,6 +28,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final UserInfoRepository userInfoRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final AnnouncementHateoasAdder announcementHateoasAdder;
 
     @Override
     public void addAnnouncement(AddAnnouncementRequest request) {
@@ -134,7 +136,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         Announcement announcement = announcementRepository.findById(announcementId).orElseThrow(() ->
                 new NotFoundException("Announcement not found"));
 
-        return GetAnnouncementByIdResponse.builder()
+        GetAnnouncementByIdResponse response = GetAnnouncementByIdResponse.builder()
                 .title(announcement.getTitle())
                 .category(announcement.getCategory())
                 .subCategory(announcement.getSubCategory())
@@ -146,5 +148,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 .userName(announcement.getUserName())
                 .phoneNumber(announcement.getPhoneNumber())
                 .build();
+
+        announcementHateoasAdder.addLinksToEntity(response, announcementId);
+
+        return response;
     }
 }
